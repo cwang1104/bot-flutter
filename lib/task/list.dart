@@ -34,7 +34,6 @@ class _TaskListState extends State<TaskListWidget> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-
       //代表循环次数
       itemCount: taskResponseList.length,
       itemBuilder: (BuildContext ctx, int i) {
@@ -47,7 +46,7 @@ class _TaskListState extends State<TaskListWidget> {
                 builder: (BuildContext ctx) {
                   return TaskDetail(
                     id: taskItem['id'],
-                    title: taskItem['task_name'],
+                    taskName: taskItem['task_name'],
                   );
                 },
               ),
@@ -56,7 +55,7 @@ class _TaskListState extends State<TaskListWidget> {
           child: Container(
             margin: EdgeInsets.only(bottom: 6),
             child: Container(
-              height: 200,
+              height: 100,
               decoration: BoxDecoration(
                 color: Colors.white30,
                 border: Border.all(
