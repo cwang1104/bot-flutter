@@ -82,7 +82,7 @@ class MyHome extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (BuildContext ctx) {
-                          return AddTask();
+                          return AddTaskWidget();
                         },
                       ),
                     );

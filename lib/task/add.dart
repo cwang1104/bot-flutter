@@ -2,9 +2,22 @@
 
 
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class AddTask extends StatelessWidget {
+class AddTaskWidget extends StatefulWidget {
+
+  @override
+  _AddTaskState createState() {
+    return _AddTaskState();
+  }
+
+
+
+}
+
+class _AddTaskState extends State<AddTaskWidget> {
+
   final nameController = TextEditingController();
   final timeStart = TextEditingController();
   final startTime = TextEditingController();
@@ -18,6 +31,7 @@ class AddTask extends StatelessWidget {
   final taskExplain = TextEditingController();
   final sendContent = TextEditingController();
   final sendTo = TextEditingController();
+  int timeStartStatus = 1;
 
   @override
   Widget build(BuildContext context){
@@ -28,18 +42,45 @@ class AddTask extends StatelessWidget {
       ),
       body: ListView(
         children:  [
+
           TextField(
             decoration: const InputDecoration(labelText: '定时器名称'),
             controller: nameController,
           ),
-          TextField(
-            decoration: const InputDecoration(labelText: '是否定时开始'),
-            controller: timeStart,
+
+          Row(
+
+            children: [
+              Text("是否定时开始："),
+              Container(
+                width: 80,
+                child: CupertinoPicker(
+                  itemExtent: 30,
+                  onSelectedItemChanged: (isTimeStart){
+                  if (isTimeStart == 0){
+                    setState(() {
+                      timeStartStatus = 1;
+                    });
+                  } else{
+                    setState(() {
+                      timeStartStatus = 2;
+                    });
+                  }
+                   print("-------${timeStartStatus}");
+                  },
+                  children: [
+                    Text("是"),
+                    Text("否"),
+                  ],
+                ),
+              )
+
+            ],
           ),
           TextField(
             decoration: const InputDecoration(
                 labelText: '定时开始时间',
-              icon: Icon(Icons.date_range_sharp)
+                icon: Icon(Icons.date_range_sharp)
             ),
             readOnly: true,
             controller: startTime,
@@ -51,9 +92,12 @@ class AddTask extends StatelessWidget {
                   lastDate: DateTime(2101)
               );
               if (pickedDate != null){
-                    print(pickedDate);
+                setState(() {
+                  //转换成时间工具
+                  print(pickedDate.millisecondsSinceEpoch ~/ 1000);
+                  startTime.text = pickedDate.toString();
+                });
               }
-              print('---------------');
             },
           ),
           TextField(
@@ -61,8 +105,26 @@ class AddTask extends StatelessWidget {
             controller: timeEnd,
           ),
           TextField(
-            decoration: const InputDecoration(labelText: '定时停止时间'),
+            decoration: const InputDecoration(
+                labelText: '定时停止时间',
+                icon: Icon(Icons.date_range_sharp)
+            ),
+            readOnly: true,
             controller: endTime,
+            onTap: () async {
+              DateTime? pickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2101)
+              );
+              if (pickedDate != null){
+                setState(() {
+                  startTime.text = pickedDate.toString();
+                });
+              }
+              print('---------------');
+            },
           ),
           TextField(
             decoration: const InputDecoration(labelText: '当日几时开始'),
@@ -100,13 +162,10 @@ class AddTask extends StatelessWidget {
             onPressed: (){
               print(nameController.text);
             },
-            child: Text('butto'),
+            child: Text('确定'),
           )
         ],
       ),
     );
   }
-
-
-
 }
