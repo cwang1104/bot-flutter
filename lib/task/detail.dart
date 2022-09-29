@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
@@ -9,7 +7,8 @@ class TaskDetail extends StatefulWidget {
   final int id;
   final String taskName;
 
-  const TaskDetail({Key? key, required this.id,required this.taskName}) : super(key: key);
+  const TaskDetail({Key? key, required this.id, required this.taskName})
+      : super(key: key);
 
   @override
   _TaskDetailState createState() {
@@ -18,8 +17,8 @@ class TaskDetail extends StatefulWidget {
 }
 
 class _TaskDetailState extends State<TaskDetail> {
-  var taskDetail;
 
+  var taskDetail ;
   //控件被创建的时候，执行initstate
   @override
   void initState() {
@@ -34,8 +33,10 @@ class _TaskDetailState extends State<TaskDetail> {
         title: const Text('定时器详情'),
         centerTitle: true,
       ),
-      body: Container(
-        child: Column(
+      body:
+      Container(
+        child:
+        Column(
           //横向轴
           crossAxisAlignment: CrossAxisAlignment.start,
           //纵向轴
@@ -56,15 +57,16 @@ class _TaskDetailState extends State<TaskDetail> {
             Text('创建时间: ${taskDetail['created_time']}'),
             Text('定时器说明: ${taskDetail['task_explain']}'),
             RawMaterialButton(
-              child: Text("停止当前定时器",
-                style: TextStyle(
-                color: Colors.white,
-                ),
-              ),
               fillColor: Colors.red,
               onPressed: () {
                 stopTimerTask();
               },
+              child: const Text(
+                "停止当前定时器",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
             ),
           ],
         ),
@@ -76,7 +78,7 @@ class _TaskDetailState extends State<TaskDetail> {
     print('kaishi');
     var response = await dio.post(
       "https://3645-61-157-13-48.ap.ngrok.io/bot/get_task_info",
-      data: {"task_id": widget.id,'task_name':widget.id},
+      data: {"task_id": widget.id, 'task_name': widget.taskName},
       options: Options(headers: {
         'Content-Type': "application/json;charset=utf-8",
         "authorization":
@@ -85,6 +87,7 @@ class _TaskDetailState extends State<TaskDetail> {
     );
 
     var result = response.data;
+    // if result
     print(result);
 
     //对私有数据赋值,必须用set，否则数据不会更新
@@ -96,15 +99,32 @@ class _TaskDetailState extends State<TaskDetail> {
   }
 
   stopTimerTask() async {
-    var response = await dio.post(
-      "https://3645-61-157-13-48.ap.ngrok.io/bot/stop_task",
-      data: {"task_id": widget.id},
-      options: Options(headers: {
-        'Content-Type': "application/json;charset=utf-8",
-        "authorization":
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVSUQiOjMsIlVzZXJOYW1lIjoid2FuZ2xpIiwiZXhwIjoxNjk1ODgxNDQyLCJpc3MiOiJncWJvdCIsIm5iZiI6MTY2NDM0NDQ0Mn0.kDhg8x3GPMDqsEZVY6hNU3r6x0HUEFoov_zDQ3EITew",
-      }),
-    );
-    print(response.data);
+    try {
+      Response response = await dio.post(
+        "https://3645-61-157-13-48.ap.ngrok.io/bot/stop_task",
+        data: {"task_id": widget.id},
+        options: Options(headers: {
+          'Content-Type': "application/json;charset=utf-8",
+          "authorization":
+              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVSUQiOjMsIlVzZXJOYW1lIjoid2FuZ2xpIiwiZXhwIjoxNjk1ODgxNDQyLCJpc3MiOiJncWJvdCIsIm5iZiI6MTY2NDM0NDQ0Mn0.kDhg8x3GPMDqsEZVY6hNU3r6x0HUEFoov_zDQ3EITew",
+        }),
+      );
+      print(response.data['code']);
+      if (response.data['code'] == 0) {
+        print(response.data['code']);
+        await showDialog(
+            context: context,
+            builder: (ctx) => const AlertDialog(
+                  title: Text('提示'),
+                  content: Text("定时器已停止"),
+                ));
+      }
+      print(response.statusCode);
+      print(response.statusMessage);
+    } on DioError catch (e) {
+      print(e.response!.statusCode);
+      print(e.response!.statusMessage);
+      throw (e);
+    }
   }
 }

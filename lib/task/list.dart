@@ -53,7 +53,7 @@ class _TaskListState extends State<TaskListWidget> {
             );
           },
           child: Container(
-            margin: EdgeInsets.only(bottom: 6),
+            margin: const EdgeInsets.only(bottom: 6),
             child: Container(
               height: 100,
               decoration: BoxDecoration(
@@ -64,7 +64,7 @@ class _TaskListState extends State<TaskListWidget> {
                   style: BorderStyle.solid,
                 ),
               ),
-              padding: EdgeInsets.only(left: 10),
+              padding: const EdgeInsets.only(left: 10),
               child: Column(
                 //横向轴
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,16 +99,18 @@ class _TaskListState extends State<TaskListWidget> {
             "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVSUQiOjMsIlVzZXJOYW1lIjoid2FuZ2xpIiwiZXhwIjoxNjk1ODgxNDQyLCJpc3MiOiJncWJvdCIsIm5iZiI6MTY2NDM0NDQ0Mn0.kDhg8x3GPMDqsEZVY6hNU3r6x0HUEFoov_zDQ3EITew",
       }),
     );
-    // print('-------------------');
-    // print(response);
+
     var result = response.data['data']['tasks'];
     print(result);
+    if (result != null){
+      //对私有数据赋值,必须用set，否则数据不会更新
+      setState(() {
+        //通过dio返回的数据，都需要把复制的操作放到setState中
+        //此处的变量需要在_TaskListState 开始时候声明
+        taskResponseList = result;
+      });
+    }
 
-    //对私有数据赋值,必须用set，否则数据不会更新
-    setState(() {
-      //通过dio返回的数据，都需要把复制的操作放到setState中
-      //此处的变量需要在_TaskListState 开始时候声明
-      taskResponseList = result;
-    });
+
   }
 }
