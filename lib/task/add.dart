@@ -281,18 +281,21 @@ class _AddTaskState extends State<AddTaskWidget> {
               ),
             ],
           ),
-
           TextField(
-            decoration: const InputDecoration(labelText: '定时任务说明'),
-            controller: taskExplain,
+            decoration: const InputDecoration(labelText: '接收者QQ号或者群号'),
+            controller: sendTo,
           ),
           TextField(
+            minLines: 1,
+            maxLines:null,
             decoration: const InputDecoration(labelText: '消息内容'),
             controller: sendContent,
           ),
           TextField(
-            decoration: const InputDecoration(labelText: '接收者号'),
-            controller: sendTo,
+            minLines: 1,
+            maxLines:null,
+            decoration: const InputDecoration(labelText: '定时任务说明'),
+            controller: taskExplain,
           ),
           TextButton(
             onPressed: () {
