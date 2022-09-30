@@ -46,8 +46,7 @@ class MyHome extends StatelessWidget {
                   accountEmail: Text('abc@abc.com'),
                   accountName: Text('name'),
                   currentAccountPicture: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        'https://c-ssl.duitang.com/uploads/item/201608/01/20160801151543_veCPr.jpeg'),
+                    backgroundImage: NetworkImage("https://img.syt5.com/2021/0813/20210813050227298.jpg"),
                   ),
                   //美化当前控件
                   decoration: BoxDecoration(
@@ -55,8 +54,7 @@ class MyHome extends StatelessWidget {
                     image: DecorationImage(
                       //填充满整个box
                       fit: BoxFit.cover,
-                      image: NetworkImage(
-                          'http://img.daimg.com/uploads/allimg/111005/1-111005232354646.jpg'),
+                       image:NetworkImage("https://img.syt5.com/2021/0813/20210813050227298.jpg"),
                     ),
                   ),
                 ),
