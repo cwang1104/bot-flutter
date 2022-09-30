@@ -18,7 +18,7 @@ class _AddTaskState extends State<AddTaskWidget> {
   final endTimeLimit = TextEditingController();
   // final interval = TextEditingController();
   final timerTypeId = TextEditingController();
-  final sendType = TextEditingController();
+  // final sendType = TextEditingController();
   final taskExplain = TextEditingController();
   final sendContent = TextEditingController();
   final sendTo = TextEditingController();
@@ -26,6 +26,7 @@ class _AddTaskState extends State<AddTaskWidget> {
   int timeEndStatus = 1;
   String interval = "15";
   int timeType = 1;
+  String sendToType = "group";
   var acceptValue;
 
   @override
@@ -145,7 +146,7 @@ class _AddTaskState extends State<AddTaskWidget> {
           Row(
             children: [
               const Text(
-                '消息发送时间间隔:',
+                '发送间隔:',
                 style: TextStyle(fontSize: 18.0),
               ),
               Radio(
@@ -154,7 +155,7 @@ class _AddTaskState extends State<AddTaskWidget> {
                 activeColor: Colors.blue,
                 onChanged: (data) {
                   setState(() {
-                    interval = interval;
+                    interval = data!;
                   });
                 },
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -169,7 +170,7 @@ class _AddTaskState extends State<AddTaskWidget> {
                 activeColor: Colors.blue,
                 onChanged: (data) {
                   setState(() {
-                    interval = interval;
+                    interval = data!;
                   });
                 },
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -179,12 +180,12 @@ class _AddTaskState extends State<AddTaskWidget> {
                 style: TextStyle(fontSize: 18.0),
               ),
               Radio(
-                value: '60min',
+                value: '60',
                 groupValue: interval,
                 activeColor: Colors.blue,
                 onChanged: (data) {
                   setState(() {
-                    interval = interval;
+                    interval = data!;
                   });
                 },
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -199,7 +200,7 @@ class _AddTaskState extends State<AddTaskWidget> {
                 activeColor: Colors.blue,
                 onChanged: (data) {
                   setState(() {
-                    interval = interval;
+                    interval = data!;
                   });
                 },
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -213,38 +214,74 @@ class _AddTaskState extends State<AddTaskWidget> {
           Row(
             children: <Widget>[
               const Text("定时器类型"),
-              Flexible(
-                  child:
-                  RadioListTile<int>(
-                    value: 1,
-                    title: const Text('消息发送'),
-                    groupValue: timeType,
-                    onChanged: (value) {
-                      setState(() {
-                        timeType = value!;
-                      });
-                    },
-                  ),
+              Radio(
+                value: 1,
+                groupValue: timeType,
+                activeColor: Colors.blue,
+                onChanged: (data) {
+                  setState(() {
+                    timeType = data!;
+                  });
+                },
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
-              Flexible(
-                child:
-                RadioListTile<int>(
-                  value: 1,
-                  title: const Text('新闻发送'),
-                  groupValue: timeType,
-                  onChanged: (value) {
-                    setState(() {
-                      timeType = value!;
-                    });
-                  },
-                ),
-              )
+              const Text(
+                '消息发送',
+                style: TextStyle(fontSize: 18.0),
+              ),
+              Radio(
+                value: 2,
+                groupValue: timeType,
+                activeColor: Colors.blue,
+                onChanged: (data) {
+                  setState(() {
+                    timeType = data!;
+                  });
+                },
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+              const Text(
+                '天气发送',
+                style: TextStyle(fontSize: 18.0),
+              ),
             ],
           ),
-          TextField(
-            decoration: const InputDecoration(labelText: '接收者类型'),
-            controller: sendType,
+          Row(
+            children: <Widget>[
+              const Text("接收者类型"),
+              Radio(
+                value: "group",
+                groupValue: sendToType,
+                activeColor: Colors.blue,
+                onChanged: (data) {
+                  setState(() {
+                    sendToType = data!;
+                  });
+                },
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+              const Text(
+                'QQ群',
+                style: TextStyle(fontSize: 18.0),
+              ),
+              Radio(
+                value: "private",
+                groupValue: sendToType,
+                activeColor: Colors.blue,
+                onChanged: (data) {
+                  setState(() {
+                    sendToType = data!;
+                  });
+                },
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+              const Text(
+                '私聊',
+                style: TextStyle(fontSize: 18.0),
+              ),
+            ],
           ),
+
           TextField(
             decoration: const InputDecoration(labelText: '定时任务说明'),
             controller: taskExplain,
@@ -260,6 +297,10 @@ class _AddTaskState extends State<AddTaskWidget> {
           TextButton(
             onPressed: () {
               print(nameController.text);
+              print('定时器类型');
+              print(timeType);
+              print(interval);
+              print(sendToType);
             },
             child: Text('确定'),
           )
