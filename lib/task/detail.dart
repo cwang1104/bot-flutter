@@ -78,7 +78,7 @@ class _TaskDetailState extends State<TaskDetail> {
     print('kaishi');
     Response response = await dio.post(
       "https://4c37-240e-398-7189-e5b0-71cf-9476-e9f7-e7da.ap.ngrok.io/bot/get_task_info",
-      data: {"task_id": widget.id, 'task_name': widget.taskName},
+      data: {"task_id": widget.id},
       options: Options(headers: {
         'Content-Type': "application/json;charset=utf-8",
         "authorization":
@@ -102,7 +102,7 @@ class _TaskDetailState extends State<TaskDetail> {
     try {
       Response response = await dio.post(
         "https://4c37-240e-398-7189-e5b0-71cf-9476-e9f7-e7da.ap.ngrok.io/bot/stop_task",
-        data: {"task_id": widget.id},
+        data: {"task_id": widget.id,'task_name': widget.taskName},
         options: Options(headers: {
           'Content-Type': "application/json;charset=utf-8",
           "authorization":
