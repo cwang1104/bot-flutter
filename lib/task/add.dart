@@ -47,7 +47,7 @@ class _AddTaskState extends State<AddTaskWidget> {
   int sendToId = 0;
 
   //定时器类型id
-  int timeType = 1;
+  int timeType = 2;
 
   //消息接收者类型 群组或者私聊
   String sendToType = "group";
@@ -300,21 +300,21 @@ class _AddTaskState extends State<AddTaskWidget> {
           Row(
             children: <Widget>[
               const Text("定时器类型"),
-              Radio(
-                value: 1,
-                groupValue: timeType,
-                activeColor: Colors.blue,
-                onChanged: (data) {
-                  setState(() {
-                    timeType = data!;
-                  });
-                },
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              const Text(
-                '天气播报',
-                style: TextStyle(fontSize: 18.0),
-              ),
+              // Radio(
+              //   value: 1,
+              //   groupValue: timeType,
+              //   activeColor: Colors.blue,
+              //   onChanged: (data) {
+              //     setState(() {
+              //       timeType = data!;
+              //     });
+              //   },
+              //   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              // ),
+              // const Text(
+              //   '天气播报',
+              //   style: TextStyle(fontSize: 18.0),
+              // ),
               Radio(
                 value: 2,
                 groupValue: timeType,
