@@ -439,7 +439,7 @@ class _AddTaskState extends State<AddTaskWidget> {
                             "时间发送间隔：${sendInterval}min\n"
                             "定时器类型：${timeType == 1? "天气播报":"消息播报"}\n"
                             "接收方类型:${sendToType == "group"? "QQ群":"私聊"}\n"
-                            "接收方QQ号:${sendToId}\n"
+                            "接收方QQ号:$sendToId\n"
                             "消息内容：${sendContent.text}\n"
                             "定时任务说明：${taskExplain.text}"
                             ""),
@@ -453,7 +453,6 @@ class _AddTaskState extends State<AddTaskWidget> {
                           TextButton(
                             onPressed: () {
                               addTask();
-                              Navigator.of(context).pop();
                             },
                             child: const Text("提交"),
                           ),
@@ -468,41 +467,80 @@ class _AddTaskState extends State<AddTaskWidget> {
   }
   addTask() async {
     print('kaishi');
-    var response = await dio.post(
-      "https://4c37-240e-398-7189-e5b0-71cf-9476-e9f7-e7da.ap.ngrok.io/bot/add_task",
-      data: {
-        "task_name": nameController.text,
-        'timed_start': isTimeStart,
-        'start_time':startTimeUnix,
-        'timed_end':isTimeEnd,
-        'end_time':endTimeUnix,
-        'timing_strategy':{
-          'interval':sendInterval,
-          'time_limit_start':startTimeLimitInt,
-          'time_limit_end':endTimeLimitInt,
+    try{
+      Response response = await dio.post(
+        "https://4c37-240e-398-7189-e5b0-71cf-9476-e9f7-e7da.ap.ngrok.io/bot/add_task",
+        data: {
+          "task_name": nameController.text,
+          'timed_start': isTimeStart,
+          'start_time':startTimeUnix,
+          'timed_end':isTimeEnd,
+          'end_time':endTimeUnix,
+          'timing_strategy':{
+            'interval':sendInterval,
+            'time_limit_start':startTimeLimitInt,
+            'time_limit_end':endTimeLimitInt,
+          },
+          'timer_type_id':timeType,
+          'send_type':sendToType,
+          'send_to':sendToId,
+          'task_explain':taskExplain.text,
+          'sent_content':sendContent.text,
         },
-        'timer_type_id':timeType,
-        'send_type':sendToType,
-        'send_to':sendToId,
-        'task_explain':taskExplain.text,
-        'sent_content':sendContent.text,
-      },
-      options: Options(headers: {
-        'Content-Type': "application/json;charset=utf-8",
-        "authorization":
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVSUQiOjMsIlVzZXJOYW1lIjoid2FuZ2xpIiwiZXhwIjoxNjk1ODgxNDQyLCJpc3MiOiJncWJvdCIsIm5iZiI6MTY2NDM0NDQ0Mn0.kDhg8x3GPMDqsEZVY6hNU3r6x0HUEFoov_zDQ3EITew",
-      }),
-    );
+        options: Options(headers: {
+          'Content-Type': "application/json;charset=utf-8",
+          "authorization":
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVSUQiOjMsIlVzZXJOYW1lIjoid2FuZ2xpIiwiZXhwIjoxNjk1ODgxNDQyLCJpc3MiOiJncWJvdCIsIm5iZiI6MTY2NDM0NDQ0Mn0.kDhg8x3GPMDqsEZVY6hNU3r6x0HUEFoov_zDQ3EITew",
+        }),
+      );
+      if (response.data['code'] == 0){
+        showDialog(
+            context: context,
+            builder: (ctx)=>AlertDialog(
+              title: const Text("提示"),
+              content: const Text("添加成功"),
+              actions: [
+                TextButton(onPressed: (){
+                  Navigator.popUntil(context, (route){
+                    return route.isFirst;
+                  });
+                },
+                    child: const Text("确定"),
+                )
+              ],
+            ));
+      } else {
+        showDialog(
+            context: context,
+            builder: (ctx)=>AlertDialog(
+              title: const Text("提示"),
+              content: const Text("添加失败，请重试（内部错误）"),
+              actions: [
+                TextButton(onPressed: (){
+                  Navigator.of(context).pop();
+                },
+                  child: const Text("确定"),
+                )
+              ],
+            ));
+      }
+    } on DioError catch (e){
+      showDialog(
+          context: context,
+          builder: (ctx)=>AlertDialog(
+            title: const Text("提示"),
+            content: const Text("添加失败请重试"),
+            actions: [
+              TextButton(onPressed: (){
+                Navigator.of(context).pop();
+              },
+                child: const Text("确定"),
+              )
+            ],
+          ));
 
-
-    showDialog(
-        context: context,
-        builder: (ctx) => const AlertDialog(
-          title: Text('提示'),
-          content: Text("添加成功"),
-        )
-    );
-
+      throw (e);
+    }
 
 
   }

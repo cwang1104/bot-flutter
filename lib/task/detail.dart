@@ -76,7 +76,7 @@ class _TaskDetailState extends State<TaskDetail> {
 
   getTaskDetail() async {
     print('kaishi');
-    var response = await dio.post(
+    Response response = await dio.post(
       "https://4c37-240e-398-7189-e5b0-71cf-9476-e9f7-e7da.ap.ngrok.io/bot/get_task_info",
       data: {"task_id": widget.id, 'task_name': widget.taskName},
       options: Options(headers: {
@@ -114,16 +114,46 @@ class _TaskDetailState extends State<TaskDetail> {
         print(response.data['code']);
         await showDialog(
             context: context,
-            builder: (ctx) => const AlertDialog(
-                  title: Text('提示'),
-                  content: Text("定时器已停止"),
+            builder: (ctx) =>  AlertDialog(
+                  title: const Text('提示'),
+                  content: const Text("定时器已停止"),
+              actions: [
+                TextButton(onPressed: (){
+                  Navigator.of(context).pop();
+                },
+                  child: const Text("确定"),
+                )
+              ],
                 ));
+      }else {
+        showDialog(
+            context: context,
+            builder: (ctx)=>AlertDialog(
+              title: const Text("提示"),
+              content: const Text("停止失败,请重试"),
+              actions: [
+                TextButton(onPressed: (){
+                  Navigator.of(context).pop();
+                },
+                  child: const Text("确定"),
+                )
+              ],
+            ));
       }
-      print(response.statusCode);
-      print(response.statusMessage);
     } on DioError catch (e) {
-      print(e.response!.statusCode);
-      print(e.response!.statusMessage);
+      showDialog(
+          context: context,
+          builder: (ctx)=>AlertDialog(
+            title: const Text("提示"),
+            content: const Text("停止失败请重试"),
+            actions: [
+              TextButton(onPressed: (){
+                Navigator.of(context).pop();
+              },
+                child: const Text("确定"),
+              )
+            ],
+          ));
       throw (e);
     }
   }
